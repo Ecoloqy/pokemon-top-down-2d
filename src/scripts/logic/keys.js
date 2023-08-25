@@ -4,11 +4,11 @@ export class Keys {
         this.a = { pressed: false };
         this.s = { pressed: false };
         this.d = { pressed: false };
+        this.shift = { pressed: false };
         this.lastKeyPressed = '';
-        this.anyMoveKeyPressed = false;
     }
-    setKeyPressed(key, status) {
-        switch (key) {
+    setKeyPressed(key, shiftPressed, status) {
+        switch (key.toLowerCase()) {
             case "w": {
                 this.w.pressed = status;
                 break;
@@ -26,10 +26,10 @@ export class Keys {
                 break;
             }
         }
-        if (status) {
-            this.lastKeyPressed = key;
+        if (status && key !== 'Shift') {
+            this.lastKeyPressed = key.toLowerCase();
         }
-        this.anyMoveKeyPressed = this.w.pressed || this.a.pressed || this.s.pressed || this.d.pressed;
+        this.shift.pressed = shiftPressed;
     }
     getKeyFacing(key) {
         switch (key) {

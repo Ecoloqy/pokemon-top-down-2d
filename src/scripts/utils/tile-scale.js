@@ -1,4 +1,4 @@
-import { mapScale, singleTileHeight, singleTileWidth } from "../../data/variables.js";
+import { mapScale, singleTileSize } from "../../data/variables.js";
 export const tileScale = () => {
-    return { width: mapScale * singleTileWidth, height: mapScale * singleTileHeight };
+    return { width: mapScale * singleTileSize, height: mapScale * singleTileSize };
 };

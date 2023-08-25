@@ -1,8 +1,10 @@
 import {
+    playerMoveSpeedDelay,
+    playerRunSpeedDelay,
+    playerSpritePosition,
     spriteAnimationDirections,
     spriteAnimationFrames,
-    spriteAnimationPadding,
-    spriteAnimationSpeed
+    spriteAnimationPadding
 } from "../../data/variables.js";
 import { CharacterFacing } from "./interfaces.js";
 
@@ -28,7 +30,9 @@ export class CharacterAnimation {
         animate();
     }
 
-    getSpriteCoordinates(facingX: CharacterFacing, facingY: CharacterFacing, isMoving: boolean): { spriteDrawX: number, spriteDrawY: number } {
+    getSpriteCoordinates(facingX: CharacterFacing, facingY: CharacterFacing, isMoving: boolean, isRunning: boolean): { spriteDrawX: number, spriteDrawY: number } {
+        const moveDelay = isRunning ? playerRunSpeedDelay : playerMoveSpeedDelay;
+
         if (facingX === -1 && facingY === 0) {
             this.imageState.direction = spriteAnimationDirections.left;
         }
@@ -46,7 +50,7 @@ export class CharacterAnimation {
             this.imageState.elapsed++;
         }
 
-        if (this.imageState.elapsed % spriteAnimationSpeed === 0) {
+        if (this.imageState.elapsed % moveDelay === 0) {
             if (this.imageState.frame < spriteAnimationFrames) {
                 this.imageState.frame++;
                 if (this.imageState.frame === spriteAnimationFrames) {
@@ -58,10 +62,10 @@ export class CharacterAnimation {
         if (!isMoving) {
             this.imageState.frame = 0;
             this.imageState.elapsed = 0;
-            return { spriteDrawX: 0, spriteDrawY: this.imageState.direction * spriteAnimationPadding };
+            return { spriteDrawX: playerSpritePosition.x, spriteDrawY: this.imageState.direction * spriteAnimationPadding + playerSpritePosition.y };
         }
 
-        return { spriteDrawX: this.imageState.frame * spriteAnimationPadding, spriteDrawY: this.imageState.direction * spriteAnimationPadding };
+        return { spriteDrawX: this.imageState.frame * spriteAnimationPadding + playerSpritePosition.x, spriteDrawY: this.imageState.direction * spriteAnimationPadding + playerSpritePosition.y };
     }
 
 }

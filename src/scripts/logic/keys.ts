@@ -10,11 +10,11 @@ export class Keys {
     public a: SingleKeyProps = { pressed: false };
     public s: SingleKeyProps = { pressed: false };
     public d: SingleKeyProps = { pressed: false };
+    public shift: SingleKeyProps = { pressed: false };
     public lastKeyPressed: string = '';
-    public anyMoveKeyPressed: boolean = false;
 
-    setKeyPressed(key: string, status: boolean): void {
-        switch(key) {
+    setKeyPressed(key: string, shiftPressed: boolean, status: boolean): void {
+        switch(key.toLowerCase()) {
             case "w": {
                 this.w.pressed = status;
                 break;
@@ -33,11 +33,11 @@ export class Keys {
             }
         }
 
-        if (status) {
-            this.lastKeyPressed = key;
+        if (status && key !== 'Shift') {
+            this.lastKeyPressed = key.toLowerCase();
         }
 
-        this.anyMoveKeyPressed = this.w.pressed || this.a.pressed || this.s.pressed || this.d.pressed;
+        this.shift.pressed = shiftPressed;
     }
 
     getKeyFacing(key: string): { facingX: CharacterFacing, facingY: CharacterFacing } {

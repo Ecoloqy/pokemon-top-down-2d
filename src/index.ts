@@ -9,15 +9,18 @@ import {
     canvasHeight,
     backgroundOffsetX,
     backgroundOffsetY,
-    singleTileWidth,
-    singleTileHeight,
+    singleTileSize,
     playerCollisionPadding,
     keydownTransition,
-    availableKeys
+    availableMoveKeys,
+    playerMoveSpeedDelay,
+    mapScale,
+    playerRunSpeedDelay,
 } from "./data/variables.js";
 import { Boundary } from "./scripts/models/boundary.js";
 import { tileScale } from "./scripts/utils/tile-scale.js";
 import { Cell } from "./scripts/models/cell.js";
+import { delayTimeout } from "./scripts/utils/delay-timeout.js";
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas');
 const context = canvas.getContext('2d');
@@ -57,7 +60,7 @@ class GameController {
         });
         this.player = new Character({
             src: './assets/img/characters/player.png',
-            position: { x: canvasWidth / 2 - singleTileWidth / 4, y: canvasHeight / 2 - singleTileHeight / 4 },
+            position: { x: canvasWidth / 2 - singleTileSize / 4, y: canvasHeight / 2 - singleTileSize / 4 },
             frames: { x: 4, y: 4 },
             collisionPadding: playerCollisionPadding
         });
@@ -77,32 +80,35 @@ class GameController {
                 boundary.drawBoundary(context);
             })
 
-            this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries);
+            this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries).then(() => {
+
+            })
         }
 
         animate();
 
         ['keydown', 'keyup'].forEach((eventName, index) => {
             window.addEventListener(eventName, (event: KeyboardEvent) => {
-                this.keys.setKeyPressed(event.key, index === 0);
-                this.player.setIsMoving(this.keys.anyMoveKeyPressed);
-                if (index === 0) {
-                    const keyPlayerFacing = this.keys.getKeyFacing(event.key);
-                    this.player.setFacing(keyPlayerFacing);
-                }
+                this.keys.setKeyPressed(event.key, event.shiftKey, index === 0);
             });
         })
     }
 
-    private transformSpritePositionOnMove(...cells: Cell[]) {
-        for (let key of availableKeys) {
+    private async transformSpritePositionOnMove(...cells: Cell[]) {
+        this.player.isRunning = this.keys.shift.pressed;
+
+        if (this.player.isMoving) {
+            return;
+        }
+
+        for (let key of availableMoveKeys) {
             if (this.keys[key].pressed && this.keys.lastKeyPressed === key) {
                 for (let i = 0; i < this.boundaries.length; i++) {
                     if (this.player.checkCollidingWith(
                         new Cell({
                             position: {
-                                x: this.boundaries[i].getPosition().x + keydownTransition[key].x,
-                                y: this.boundaries[i].getPosition().y + keydownTransition[key].y,
+                                x: this.boundaries[i].getPosition().x + keydownTransition[key].x * singleTileSize * mapScale,
+                                y: this.boundaries[i].getPosition().y + keydownTransition[key].y * singleTileSize * mapScale,
                             }
                         })
                     )) {
@@ -110,9 +116,18 @@ class GameController {
                     }
                 }
 
-                cells.forEach((cell) => {
-                    cell.transformPosition(keydownTransition[key]);
-                })
+                this.player.isMoving = true;
+                const keyPlayerFacing = this.keys.getKeyFacing(key);
+                this.player.setFacing(keyPlayerFacing);
+                for (let i = 0; i < singleTileSize * mapScale;) {
+                    const moveDelay = this.player.isRunning ? playerRunSpeedDelay : playerMoveSpeedDelay;
+                    cells.forEach((cell) => {
+                        cell.transformPosition(keydownTransition[key]);
+                    });
+                    i += keydownTransition[key].abs;
+                    await delayTimeout(moveDelay);
+                }
+                this.player.isMoving = false;
             }
         }
     }
