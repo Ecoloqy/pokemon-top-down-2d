@@ -10,4 +10,4 @@ RUN npm install
 FROM nginx:1.22.0-alpine as deploy
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY src/* /usr/share/nginx/html
+COPY src/ /usr/share/nginx/html
