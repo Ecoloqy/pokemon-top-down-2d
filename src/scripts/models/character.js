@@ -1,5 +1,6 @@
 import { Sprite } from "./sprite.js";
 import { CharacterAnimation } from "../utils/character-animation.js";
+import { playerSpriteRenderPosition } from "../../data/variables.js";
 export class Character extends Sprite {
     constructor({ src, position, velocity = 1, frames, collisionPadding }) {
         super({ src, position, velocity, frames, collisionPadding });
@@ -12,7 +13,7 @@ export class Character extends Sprite {
     }
     drawImage(context) {
         const { spriteDrawX, spriteDrawY } = this.characterAnimation.getSpriteCoordinates(this.facingX, this.facingY, this.isMoving, this.isRunning);
-        context.drawImage(this.image, spriteDrawX, spriteDrawY, this.image.width / this.frames.x, this.image.height / this.frames.y, this.position.x, this.position.y, this.image.width / this.frames.x, this.image.height / this.frames.y);
+        context.drawImage(this.image, spriteDrawX, spriteDrawY, this.image.width / this.frames.x, this.image.height / this.frames.y, this.position.x - playerSpriteRenderPosition.x, this.position.y - playerSpriteRenderPosition.y, this.image.width / this.frames.x, this.image.height / this.frames.y);
     }
     setFacing(facing) {
         this.facingX = facing.facingX;

@@ -70,7 +70,7 @@ class GameController {
         animate();
         ['keydown', 'keyup'].forEach((eventName, index) => {
             window.addEventListener(eventName, (event) => {
-                this.keys.setKeyPressed(event.key, event.shiftKey, index === 0);
+                this.keys.setKeyPressed(event.key.toLowerCase(), event.shiftKey, index === 0);
             });
         });
     }
@@ -85,8 +85,8 @@ class GameController {
                     for (let i = 0; i < this.boundaries.length; i++) {
                         if (this.player.checkCollidingWith(new Cell({
                             position: {
-                                x: this.boundaries[i].getPosition().x + keydownTransition[key].x * singleTileSize * mapScale,
-                                y: this.boundaries[i].getPosition().y + keydownTransition[key].y * singleTileSize * mapScale,
+                                x: this.boundaries[i].getPosition().x + keydownTransition[key].x * singleTileSize,
+                                y: this.boundaries[i].getPosition().y + keydownTransition[key].y * singleTileSize,
                             }
                         }))) {
                             return;

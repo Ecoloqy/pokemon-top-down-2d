@@ -14,7 +14,7 @@ export class Keys {
     public lastKeyPressed: string = '';
 
     setKeyPressed(key: string, shiftPressed: boolean, status: boolean): void {
-        switch(key.toLowerCase()) {
+        switch(key) {
             case "w": {
                 this.w.pressed = status;
                 break;
@@ -33,8 +33,8 @@ export class Keys {
             }
         }
 
-        if (status && key !== 'Shift') {
-            this.lastKeyPressed = key.toLowerCase();
+        if (status && key !== 'shift') {
+            this.lastKeyPressed = key;
         }
 
         this.shift.pressed = shiftPressed;

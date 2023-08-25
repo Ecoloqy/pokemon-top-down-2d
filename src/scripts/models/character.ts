@@ -1,6 +1,7 @@
 import { Sprite, SpriteProps } from "./sprite.js";
 import { CharacterAnimation } from "../utils/character-animation.js";
 import { CharacterFacing } from "../utils/interfaces.js";
+import { playerSpriteRenderPosition } from "../../data/variables.js";
 
 export class Character extends Sprite {
 
@@ -24,8 +25,8 @@ export class Character extends Sprite {
             spriteDrawY,
             this.image.width / this.frames.x,
             this.image.height / this.frames.y,
-            this.position.x,
-            this.position.y,
+            this.position.x - playerSpriteRenderPosition.x,
+            this.position.y - playerSpriteRenderPosition.y,
             this.image.width / this.frames.x,
             this.image.height / this.frames.y,
         );

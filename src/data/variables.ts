@@ -14,6 +14,7 @@ export const playerMoveSpeedDelay = 16;
 export const playerRunSpeedDelay = 8;
 export const playerCollisionPadding: { n: number, s: number, e: number, w: number } = { n: -8, s: -8, e: -8, w: -8 };
 export const playerSpritePosition: { x: number, y: number } = { x: 4, y: 8 };
+export const playerSpriteRenderPosition: { x: number, y: number } = { x: 0, y: 12 };
 export const spriteAnimationPadding: number = 64;
 export const spriteAnimationFrames: number = 4;
 export const spriteAnimationDirections: { left: number, right: number, top: number, down: number } = { down: 1, left: 0, right: 2, top: 3 };
