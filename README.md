@@ -1,6 +1,6 @@
 # Pokemon 2D Game
 
-Educational project using HTML Canvas + Typescript.
+Web technologies (HTML5 + CSS3 + JavaScript) + HTML Canvas + Typescript + Tailwind.
 
 ## Installation
 
