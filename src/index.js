@@ -18,11 +18,13 @@ import { Boundary } from "./scripts/models/boundary.js";
 import { tileScale } from "./scripts/utils/tile-scale.js";
 import { Cell } from "./scripts/models/cell.js";
 import { delayTimeout } from "./scripts/utils/delay-timeout.js";
+import { KeyEvents } from "./scripts/logic/key-events.js";
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 class GameController {
     constructor(width, height) {
         this.keys = new Keys();
+        this.keyEvents = new KeyEvents(this.keys);
         this.collisionsMap = mapToArray(collisions);
         this.battleZonesMap = mapToArray(battleZones);
         this.boundaries = [];
@@ -68,11 +70,6 @@ class GameController {
             });
         };
         animate();
-        ['keydown', 'keyup'].forEach((eventName, index) => {
-            window.addEventListener(eventName, (event) => {
-                this.keys.setKeyPressed(event.key.toLowerCase(), event.shiftKey, index === 0);
-            });
-        });
     }
     transformSpritePositionOnMove(...cells) {
         return __awaiter(this, void 0, void 0, function* () {

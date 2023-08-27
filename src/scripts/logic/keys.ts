@@ -4,13 +4,23 @@ export interface SingleKeyProps {
     pressed: boolean;
 }
 
+export interface SingleDirectionKeyProps extends SingleKeyProps {
+    directed: boolean;
+}
+
+export interface SingleTouchKeyProps extends SingleKeyProps {
+    startX: number;
+    startY: number;
+}
+
 export class Keys {
 
-    public w: SingleKeyProps = { pressed: false };
-    public a: SingleKeyProps = { pressed: false };
-    public s: SingleKeyProps = { pressed: false };
-    public d: SingleKeyProps = { pressed: false };
+    public w: SingleDirectionKeyProps = { pressed: false, directed: false };
+    public a: SingleDirectionKeyProps = { pressed: false, directed: false };
+    public s: SingleDirectionKeyProps = { pressed: false, directed: false };
+    public d: SingleDirectionKeyProps = { pressed: false, directed: false };
     public shift: SingleKeyProps = { pressed: false };
+    public touch: SingleTouchKeyProps = { pressed: false, startX: 0, startY: 0 }
     public lastKeyPressed: string = '';
 
     setKeyPressed(key: string, shiftPressed: boolean, status: boolean): void {
@@ -37,6 +47,7 @@ export class Keys {
             this.lastKeyPressed = key;
         }
 
+        console.log(shiftPressed);
         this.shift.pressed = shiftPressed;
     }
 

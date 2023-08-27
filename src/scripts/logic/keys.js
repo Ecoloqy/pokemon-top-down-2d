@@ -1,10 +1,11 @@
 export class Keys {
     constructor() {
-        this.w = { pressed: false };
-        this.a = { pressed: false };
-        this.s = { pressed: false };
-        this.d = { pressed: false };
+        this.w = { pressed: false, directed: false };
+        this.a = { pressed: false, directed: false };
+        this.s = { pressed: false, directed: false };
+        this.d = { pressed: false, directed: false };
         this.shift = { pressed: false };
+        this.touch = { pressed: false, startX: 0, startY: 0 };
         this.lastKeyPressed = '';
     }
     setKeyPressed(key, shiftPressed, status) {
@@ -29,6 +30,7 @@ export class Keys {
         if (status && key !== 'shift') {
             this.lastKeyPressed = key;
         }
+        console.log(shiftPressed);
         this.shift.pressed = shiftPressed;
     }
     getKeyFacing(key) {
