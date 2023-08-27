@@ -2,15 +2,63 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
         <title>Pokemon browser game</title>
-        <link rel="stylesheet" href="style.css">
+        <link href="style.css" rel="stylesheet">
         <script type="module" src="index.js" defer></script>
     </head>
-    <body>
-        <canvas></canvas>
+    <body class="bg-violet">
+        <div id="game-window-frame"></div>
+        <div class="w-full h-full flex flex-row">
+            <div class="hidden w-full h-[100vh] md:flex flex-col gap-2 justify-center items-center">
+                <button id="reset-button" class="w-[160px] bg-amber-50 text-black py-2 px-8">Reset</button>
+                <button id="mute-button" class="w-[160px] bg-amber-50 text-black py-2 px-8">Mute</button>
+                <button id="unmute-button" class="hidden w-[160px] bg-amber-50 text-black py-2 px-8">Unmute</button>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">X-AXIS</div>
+                    <div id="x-axis" class="w-full text-left">0</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">Y-AXIS</div>
+                    <div id="y-axis" class="w-full text-left">0</div>
+                </div>
+            </div>
+
+            <canvas id="game-window" class="w-[100vw] h-full"></canvas>
+
+            <div class="hidden w-full h-[100vh] md:flex flex-col gap-2 justify-center items-center">
+                <div class="text-2xl">Keys</div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">&#8593;</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">W</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">&#8592;</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">A</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">&#8595;</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">S</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">&#8594;</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">D</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">A</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">DELETE</div>
+                </div>
+                <div class="w-full flex flex-row gap-4 justify-center items-center">
+                    <div class="w-full text-right">B</div>
+                    <div class="w-[10%] text-center">|</div>
+                    <div class="w-full text-left">END</div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

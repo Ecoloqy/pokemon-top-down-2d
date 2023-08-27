@@ -8,45 +8,49 @@ export class KeyEvents {
     constructor(keys: Keys) {
         ['keydown', 'keyup'].forEach((eventName, index) => {
             window.addEventListener(eventName, (event: KeyboardEvent) => {
-                keys.setKeyPressed(event.key.toLowerCase(), event.shiftKey, index === 0);
+                keys.setKeyPressed(event.key.toLowerCase(), index === 0);
             });
         })
 
         window.addEventListener('touchstart', (event: TouchEvent) => {
-            event.preventDefault();
-
             keys.touch.pressed = true;
             keys.touch.startX = event.targetTouches.item(0).clientX;
             keys.touch.startY = event.targetTouches.item(0).clientY;
+
+            document.getElementById('x-axis').textContent = Math.round(keys.touch.startX) + '';
+            document.getElementById('y-axis').textContent = Math.round(keys.touch.startY) + '';
         })
 
         window.addEventListener('touchmove', (event: TouchEvent) => {
-            event.preventDefault();
-
             if (keys.touch.pressed) {
-                keys.w.directed = keys.touch.startY > event.targetTouches.item(0).clientY + this.moveDirectionModifier;
-                keys.a.directed = keys.touch.startX > event.targetTouches.item(0).clientX + this.moveDirectionModifier;
-                keys.s.directed = event.targetTouches.item(0).clientY > keys.touch.startY + this.moveDirectionModifier;
-                keys.d.directed = event.targetTouches.item(0).clientX > keys.touch.startX + this.moveDirectionModifier;
+                const newXCursorPos = event.targetTouches.item(0).clientX;
+                const newYCursorPos = event.targetTouches.item(0).clientY;
+
+                keys.w.directed = keys.touch.startY > newYCursorPos + this.moveDirectionModifier;
+                keys.a.directed = keys.touch.startX > newXCursorPos + this.moveDirectionModifier;
+                keys.s.directed = newYCursorPos > keys.touch.startY + this.moveDirectionModifier;
+                keys.d.directed = newXCursorPos > keys.touch.startX + this.moveDirectionModifier;
 
                 if (!keys.a.directed && !keys.s.directed && !keys.d.directed) {
-                    keys.setKeyPressed('w', keys.touch.startY > event.targetTouches.item(0).clientY + this.runDirectionModifier, keys.touch.startY > event.targetTouches.item(0).clientY + this.moveDirectionModifier);
+                    document.getElementById('y-axis').textContent = Math.round(keys.touch.startY) + ' - ' + Math.round(newYCursorPos);
+                    keys.setKeyPressed('w', keys.touch.startY > newYCursorPos + this.moveDirectionModifier, keys.touch.startY > newYCursorPos + this.runDirectionModifier);
                 }
                 if (!keys.w.directed && !keys.s.directed && !keys.d.directed) {
-                    keys.setKeyPressed('a', keys.touch.startX > event.targetTouches.item(0).clientX + this.runDirectionModifier, keys.touch.startX > event.targetTouches.item(0).clientX + this.moveDirectionModifier);
+                    document.getElementById('x-axis').textContent = Math.round(keys.touch.startX) + ' - ' + Math.round(newXCursorPos);
+                    keys.setKeyPressed('a', keys.touch.startX > newXCursorPos + this.moveDirectionModifier, keys.touch.startX > newXCursorPos + this.runDirectionModifier);
                 }
                 if (!keys.w.directed && !keys.a.directed && !keys.d.directed) {
-                    keys.setKeyPressed('s', event.targetTouches.item(0).clientY > keys.touch.startY + this.runDirectionModifier, event.targetTouches.item(0).clientY > keys.touch.startY + this.moveDirectionModifier);
+                    document.getElementById('y-axis').textContent = Math.round(keys.touch.startY) + ' + ' + Math.round(newYCursorPos);
+                    keys.setKeyPressed('s', newYCursorPos > keys.touch.startY + this.moveDirectionModifier, newYCursorPos > keys.touch.startY + this.runDirectionModifier);
                 }
                 if (!keys.w.directed && !keys.a.directed && !keys.s.directed) {
-                    keys.setKeyPressed('d', event.targetTouches.item(0).clientX > keys.touch.startX + this.runDirectionModifier, event.targetTouches.item(0).clientX > keys.touch.startX + this.moveDirectionModifier);
+                    document.getElementById('x-axis').textContent = Math.round(keys.touch.startX) + ' + ' + Math.round(newXCursorPos);
+                    keys.setKeyPressed('d', newXCursorPos > keys.touch.startX + this.moveDirectionModifier, newXCursorPos > keys.touch.startX + this.runDirectionModifier);
                 }
             }
         })
 
         window.addEventListener('touchend', (event: TouchEvent) => {
-            event.preventDefault();
-
             keys.touch.pressed = false;
             keys.setKeyPressed('w', false, false);
             keys.setKeyPressed('a', false, false);

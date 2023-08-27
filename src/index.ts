@@ -22,6 +22,7 @@ import { tileScale } from "./scripts/utils/tile-scale.js";
 import { Cell } from "./scripts/models/cell.js";
 import { delayTimeout } from "./scripts/utils/delay-timeout.js";
 import { KeyEvents } from "./scripts/logic/key-events.js";
+import { InterfaceController } from "./scripts/logic/interface-controller.js";
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas');
 const context = canvas.getContext('2d');
@@ -29,6 +30,7 @@ const context = canvas.getContext('2d');
 class GameController {
     private keys = new Keys();
     private keyEvents = new KeyEvents(this.keys);
+    private interfaceController = new InterfaceController();
 
     private collisionsMap = mapToArray(collisions);
     private battleZonesMap = mapToArray(battleZones);
@@ -92,7 +94,7 @@ class GameController {
     }
 
     private async transformSpritePositionOnMove(...cells: Cell[]) {
-        this.player.isRunning = this.keys.shift.pressed;
+        this.player.isRunning = this.keys.end.pressed;
 
         if (this.player.isMoving) {
             return;
