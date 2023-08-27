@@ -13,12 +13,16 @@ export class KeyEvents {
         })
 
         window.addEventListener('touchstart', (event: TouchEvent) => {
+            event.preventDefault();
+
             keys.touch.pressed = true;
             keys.touch.startX = event.targetTouches.item(0).clientX;
             keys.touch.startY = event.targetTouches.item(0).clientY;
         })
 
         window.addEventListener('touchmove', (event: TouchEvent) => {
+            event.preventDefault();
+
             if (keys.touch.pressed) {
                 keys.w.directed = keys.touch.startY > event.targetTouches.item(0).clientY + this.moveDirectionModifier;
                 keys.a.directed = keys.touch.startX > event.targetTouches.item(0).clientX + this.moveDirectionModifier;
@@ -40,7 +44,9 @@ export class KeyEvents {
             }
         })
 
-        window.addEventListener('touchend', () => {
+        window.addEventListener('touchend', (event: TouchEvent) => {
+            event.preventDefault();
+
             keys.touch.pressed = false;
             keys.setKeyPressed('w', false, false);
             keys.setKeyPressed('a', false, false);
