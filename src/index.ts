@@ -65,7 +65,7 @@ class GameController {
 
     private battleInitiator: BattleInitiator | null = null;
 
-    constructor(width: number, height: number, gameStatus?: GameControllerStatus) {
+    constructor(width: number, height: number) {
         canvas.width = width;
         canvas.height = height;
         context.fillRect(0, 0, width, height);
@@ -175,9 +175,5 @@ class GameController {
     }
 }
 
-const savedGameStatus = window.localStorage.getItem(saveGameLocalStorageKey);
-const gameController = new GameController(canvasWidth, canvasHeight, !!savedGameStatus ? JSON.parse(savedGameStatus) : undefined);
-
-window.addEventListener('beforeunload', () => {
-    window.localStorage.setItem(saveGameLocalStorageKey, JSON.stringify(gameController));
-});
+const gameController = new GameController(canvasWidth, canvasHeight);
+console.log(gameController);
