@@ -40,6 +40,11 @@ As in every Pokemon game, here we also start our adventure as a Pokemon Trainer.
 - [x] Foreground objects
 - [x] Character movement animation
 
+### Simple User Interface
+- [x] Preparing images and sprites
+- [x] Desktop design with controls
+- [x] Logging touch moves
+
 ## Stage 2
 
 ### Battle Sequences
@@ -47,5 +52,17 @@ As in every Pokemon game, here we also start our adventure as a Pokemon Trainer.
 - [ ] Transition from map to battle sequence
 - [ ] Draw battle background
 - [ ] Add battle sprites
+
+### Enhanced User Interface
+- [ ] Preparing images and sprites for mobiles
+- [ ] Mobile design with controls
+- [ ] Character interaction with touch controls
+
+### Player Interaction
+- [ ] NPCs Creation
+- [ ] NPCs movement
+- [ ] NPCs dialogue interaction
+- [ ] NPCs battle activation
+- [ ] Earning money after battles
 
 ## Stage 3 - In plan
