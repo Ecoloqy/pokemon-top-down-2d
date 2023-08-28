@@ -11,7 +11,7 @@ import { Keys } from "./scripts/logic/keys.js";
 import { collisions } from "./data/map/collisions.js";
 import { battleZones } from "./data/map/battle-zones.js";
 import { mapToArray } from "./scripts/utils/map-to-array.js";
-import { canvasWidth, canvasHeight, singleTileSize, keydownTransition, availableMoveKeys, playerMoveSpeedDelay, mapScale, playerRunSpeedDelay, saveGameLocalStorageKey, } from "./data/variables.js";
+import { canvasWidth, canvasHeight, singleTileSize, keydownTransition, availableMoveKeys, playerMoveSpeedDelay, mapScale, playerRunSpeedDelay, } from "./data/variables.js";
 import { Boundary } from "./scripts/models/boundary.js";
 import { Cell } from "./scripts/models/cell.js";
 import { delayTimeout } from "./scripts/utils/delay-timeout.js";
@@ -27,7 +27,7 @@ import { WildBattleInitiator } from "./scripts/logic/wild-battle-initiator.js";
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 class GameController {
-    constructor(width, height, gameStatus) {
+    constructor(width, height) {
         this.keys = new Keys();
         this.keyEvents = new KeyEvents(this.keys);
         this.interfaceController = new InterfaceController(this.keys);
@@ -134,8 +134,5 @@ class GameController {
         });
     }
 }
-const savedGameStatus = window.localStorage.getItem(saveGameLocalStorageKey);
-const gameController = new GameController(canvasWidth, canvasHeight, !!savedGameStatus ? JSON.parse(savedGameStatus) : undefined);
-window.addEventListener('beforeunload', () => {
-    window.localStorage.setItem(saveGameLocalStorageKey, JSON.stringify(gameController));
-});
+const gameController = new GameController(canvasWidth, canvasHeight);
+console.log(gameController);
