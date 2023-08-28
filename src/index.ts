@@ -30,7 +30,7 @@ const context = canvas.getContext('2d');
 class GameController {
     private keys = new Keys();
     private keyEvents = new KeyEvents(this.keys);
-    private interfaceController = new InterfaceController();
+    private interfaceController = new InterfaceController(this.keys);
 
     private collisionsMap = mapToArray(collisions);
     private battleZonesMap = mapToArray(battleZones);

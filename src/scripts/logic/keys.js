@@ -50,6 +50,20 @@ export class Keys {
         if (status && !ignoredKeys.includes(key)) {
             this.lastKeyPressed = key;
         }
+        if (!status && !ignoredKeys.includes(key) && this.lastKeyPressed === key) {
+            if (this.w.pressed) {
+                this.lastKeyPressed = 'w';
+            }
+            if (this.a.pressed) {
+                this.lastKeyPressed = 'a';
+            }
+            if (this.s.pressed) {
+                this.lastKeyPressed = 's';
+            }
+            if (this.d.pressed) {
+                this.lastKeyPressed = 'd';
+            }
+        }
         if (runPressed !== undefined) {
             this.end.pressed = runPressed;
         }

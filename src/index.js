@@ -26,7 +26,7 @@ class GameController {
     constructor(width, height) {
         this.keys = new Keys();
         this.keyEvents = new KeyEvents(this.keys);
-        this.interfaceController = new InterfaceController();
+        this.interfaceController = new InterfaceController(this.keys);
         this.collisionsMap = mapToArray(collisions);
         this.battleZonesMap = mapToArray(battleZones);
         this.boundaries = [];

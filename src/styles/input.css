@@ -22,7 +22,37 @@ body {
     margin: 0;
 }
 
-@media(orientation: landscape) and (max-width: 1000px) {
+@media (max-width: 640px) {
+
+    #game-controls {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        width: 200px;
+        height: 100px;
+        z-index: 999;
+    }
+
+    #game-controls #a-button {
+        background: url("assets/interface/img/a-button.png") no-repeat center;
+        background-size: cover;
+        height: 80px;
+        width: 80px;
+    }
+
+    #game-controls #b-button {
+        background: url("assets/interface/img/b-button.png") no-repeat center;
+        background-size: cover;
+        height: 80px;
+        width: 80px;
+    }
+
+}
+
+@media(orientation: landscape) and (max-width: 640px) {
 
     #game-keys {
         display: none;
@@ -30,14 +60,36 @@ body {
 
 }
 
+@media(max-height: 320px) {
+
+    #ui-controls {
+        display: none;
+    }
+
+}
+
+@media(min-width: 640px) {
+
+    #game-window {
+        display: flex;
+        flex-direction: column;
+        justify-self: center;
+        align-self: center;
+        margin-bottom: 70px;
+        height: 210px;
+        width: 330px;
+    }
+
+}
+
 @media(min-width: 1000px) {
 
     #game-window-frame {
+        background: url("assets/interface/img/gb-frame.png") no-repeat center;
         position: absolute;
         height: 100vh;
         width: 100vw;
         z-index: -1;
-        background: url("assets/interface/img/gb-frame.png") no-repeat center;
     }
 
     #game-window {
