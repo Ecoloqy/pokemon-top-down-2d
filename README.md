@@ -53,16 +53,17 @@ As in every Pokemon game, here we also start our adventure as a Pokemon Trainer.
 - [x] Character interaction with touch controls
 
 ### Battle Sequences
-- [ ] Battle activation
-- [ ] Transition from map to battle sequence
-- [ ] Draw battle background
+- [x] Battle activation
+- [x] Transition from map to battle sequence
+- [x] Draw battle background
 - [ ] Add battle sprites
+- [ ] Add battle logic
 
-### Player Interaction
-- [ ] NPCs Creation
-- [ ] NPCs movement
-- [ ] NPCs dialogue interaction
-- [ ] NPCs battle activation
+### NPC Interaction
+- [ ] Characters creation
+- [ ] Characters movement
+- [ ] Characters dialogue interaction
+- [ ] Characters battle activation
 - [ ] Earning money after battles
 
 ## Stage 3 - In plan

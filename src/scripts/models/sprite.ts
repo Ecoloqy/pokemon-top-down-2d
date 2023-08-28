@@ -18,8 +18,12 @@ export interface SpriteProps extends CellProps {
          this.image.src = src;
      }
 
-     public drawImage(context: CanvasRenderingContext2D): void {
-         context.drawImage(this.image, this.position.x, this.position.y);
+     public drawImage(context: CanvasRenderingContext2D, width?: number, height?: number): void {
+         if (!!width && !!height) {
+             context.drawImage(this.image, this.position.x, this.position.y, width, height);
+         } else {
+             context.drawImage(this.image, this.position.x, this.position.y);
+         }
      }
 
 }

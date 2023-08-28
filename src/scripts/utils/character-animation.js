@@ -6,10 +6,6 @@ export class CharacterAnimation {
             direction: 0,
             elapsed: 0,
         };
-        const animate = () => {
-            window.requestAnimationFrame(animate);
-        };
-        animate();
     }
     getSpriteCoordinates(facingX, facingY, isMoving, isRunning) {
         const moveDelay = isRunning ? playerRunSpeedDelay : playerMoveSpeedDelay;

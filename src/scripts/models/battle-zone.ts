@@ -1,6 +1,6 @@
 import { Cell, CellProps } from "./cell.js";
 
-export class Boundary extends Cell {
+export class BattleZone extends Cell {
 
     constructor({ position, frames }: CellProps) {
         super({ position, frames });

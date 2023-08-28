@@ -1,4 +1,4 @@
-import {Keys} from "./keys";
+import { Keys } from "./keys.js";
 
 export class InterfaceController {
 

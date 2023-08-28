@@ -26,11 +26,11 @@ export class Cell {
         this.position = { x: newXPos, y: newYPos };
     }
 
-    getPosition(): Cell['position'] {
+    public getPosition(): Cell['position'] {
         return this.position;
     }
 
-    checkCollidingWith(cell: Cell): boolean {
+    public checkCollidingWith(cell: Cell): boolean {
         return this.getPosition().x + this.width + this.collisionPadding.e >= cell.getPosition().x - cell.collisionPadding.w &&
             this.getPosition().x - this.collisionPadding.w <= cell.getPosition().x + cell.collisionPadding.e + cell.width &&
             this.getPosition().y + this.height + this.collisionPadding.s >= cell.getPosition().y - cell.collisionPadding.n &&

@@ -6,7 +6,7 @@ import {
     spriteAnimationFrames,
     spriteAnimationPadding
 } from "../../data/variables.js";
-import { CharacterFacing } from "./interfaces.js";
+import { CharacterFacing } from "./types.js";
 
 export interface CharacterAnimationState {
     frame: number;
@@ -22,15 +22,7 @@ export class CharacterAnimation {
         elapsed: 0,
     }
 
-    constructor() {
-        const animate = () => {
-            window.requestAnimationFrame(animate);
-        }
-
-        animate();
-    }
-
-    getSpriteCoordinates(facingX: CharacterFacing, facingY: CharacterFacing, isMoving: boolean, isRunning: boolean): { spriteDrawX: number, spriteDrawY: number } {
+    public getSpriteCoordinates(facingX: CharacterFacing, facingY: CharacterFacing, isMoving: boolean, isRunning: boolean): { spriteDrawX: number, spriteDrawY: number } {
         const moveDelay = isRunning ? playerRunSpeedDelay : playerMoveSpeedDelay;
 
         if (facingX === -1 && facingY === 0) {

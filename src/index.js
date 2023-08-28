@@ -7,71 +7,97 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Sprite } from "./scripts/models/sprite.js";
 import { Keys } from "./scripts/logic/keys.js";
-import { Character } from "./scripts/models/character.js";
 import { collisions } from "./data/map/collisions.js";
 import { battleZones } from "./data/map/battle-zones.js";
 import { mapToArray } from "./scripts/utils/map-to-array.js";
-import { canvasWidth, canvasHeight, backgroundOffsetX, backgroundOffsetY, singleTileSize, playerCollisionPadding, keydownTransition, availableMoveKeys, playerMoveSpeedDelay, mapScale, playerRunSpeedDelay, } from "./data/variables.js";
+import { canvasWidth, canvasHeight, singleTileSize, keydownTransition, availableMoveKeys, playerMoveSpeedDelay, mapScale, playerRunSpeedDelay, saveGameLocalStorageKey, } from "./data/variables.js";
 import { Boundary } from "./scripts/models/boundary.js";
-import { tileScale } from "./scripts/utils/tile-scale.js";
 import { Cell } from "./scripts/models/cell.js";
 import { delayTimeout } from "./scripts/utils/delay-timeout.js";
 import { KeyEvents } from "./scripts/logic/key-events.js";
 import { InterfaceController } from "./scripts/logic/interface-controller.js";
+import { BattleZone } from "./scripts/models/battle-zone.js";
+import { EnemyRandomizer } from "./scripts/utils/enemy-randomizer.js";
+import { createPokemon } from "./data/enemy-initializer.js";
+import { createBackground, createForeground } from "./data/surroundings-initializer.js";
+import { createPlayer } from "./data/characters-initializer.js";
+import { getInteractive } from "./scripts/utils/get-interactive.js";
+import { WildBattleInitiator } from "./scripts/logic/wild-battle-initiator.js";
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 class GameController {
-    constructor(width, height) {
+    constructor(width, height, gameStatus) {
         this.keys = new Keys();
         this.keyEvents = new KeyEvents(this.keys);
         this.interfaceController = new InterfaceController(this.keys);
-        this.collisionsMap = mapToArray(collisions);
-        this.battleZonesMap = mapToArray(battleZones);
-        this.boundaries = [];
+        this.boundaries = getInteractive(mapToArray(collisions), Boundary);
+        this.battleZones = getInteractive(mapToArray(battleZones), BattleZone);
+        this.background = createBackground();
+        this.foreground = createForeground();
+        this.player = createPlayer();
+        this.enemyRandomizer = new EnemyRandomizer([
+            { enemy: createPokemon('pidgey'), changeInPercent: 10 },
+        ]);
+        this.battleInitiator = null;
         canvas.width = width;
         canvas.height = height;
         context.fillRect(0, 0, width, height);
-        this.collisionsMap.forEach((row, y) => {
-            row.forEach((symbol, x) => {
-                if (symbol !== 0) {
-                    const newBoundary = new Boundary({
-                        position: {
-                            x: (x * tileScale().width) + backgroundOffsetX,
-                            y: (y * tileScale().height) + backgroundOffsetY
-                        }
-                    });
-                    this.boundaries.push(newBoundary);
-                }
-            });
-        });
-        this.background = new Sprite({
-            src: './assets/img/map/map.png',
-            position: { x: backgroundOffsetX, y: backgroundOffsetY }
-        });
-        this.player = new Character({
-            src: './assets/img/characters/player.png',
-            position: { x: canvasWidth / 2 - singleTileSize / 4, y: canvasHeight / 2 - singleTileSize / 4 },
-            frames: { x: 4, y: 4 },
-            collisionPadding: playerCollisionPadding
-        });
-        this.foreground = new Sprite({
-            src: './assets/img/map/foreground.png',
-            position: { x: backgroundOffsetX, y: backgroundOffsetY }
-        });
         const animate = () => {
             window.requestAnimationFrame(animate);
             this.background.drawImage(context);
             this.player.drawImage(context);
             this.foreground.drawImage(context);
             this.boundaries.forEach((boundary) => {
-                boundary.drawBoundary(context);
+                boundary.drawCell(context);
             });
-            this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries).then(() => {
+            this.battleZones.forEach((battleZone) => {
+                battleZone.drawCell(context);
             });
+            if (this.player.isInBattle) {
+                this.battleInitiator;
+            }
+            if (!this.player.isInBattle) {
+                this.checkBattleZoneOnMove();
+                this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.battleZones);
+            }
+            if (!!this.battleInitiator) {
+                if (this.battleInitiator.isBattleInitialized) {
+                    this.battleInitiator.battleBackground.drawImage(context, canvasWidth, canvasHeight);
+                }
+                if (this.battleInitiator.isBattleCompleted) {
+                    this.battleInitiator.player.isInBattle = false;
+                    this.battleInitiator = null;
+                }
+            }
         };
         animate();
+    }
+    checkBattleZoneOnMove() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.player.isMoving) {
+                return;
+            }
+            for (let key of availableMoveKeys) {
+                if (this.keys[key].pressed && this.keys.lastKeyPressed === key) {
+                    for (let i = 0; i < this.battleZones.length; i++) {
+                        if (this.player.checkCollidingWith(new Cell({
+                            position: {
+                                x: this.battleZones[i].getPosition().x + keydownTransition[key].x * singleTileSize,
+                                y: this.battleZones[i].getPosition().y + keydownTransition[key].y * singleTileSize,
+                            }
+                        }))) {
+                            const randomEnemy = this.enemyRandomizer.getRandomEnemy();
+                            if (randomEnemy) {
+                                this.player.isInBattle = true;
+                                this.battleInitiator = new WildBattleInitiator(this.player, randomEnemy);
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        });
     }
     transformSpritePositionOnMove(...cells) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -108,5 +134,8 @@ class GameController {
         });
     }
 }
-const gameController = new GameController(canvasWidth, canvasHeight);
-console.log(context);
+const savedGameStatus = window.localStorage.getItem(saveGameLocalStorageKey);
+const gameController = new GameController(canvasWidth, canvasHeight, !!savedGameStatus ? JSON.parse(savedGameStatus) : undefined);
+window.addEventListener('beforeunload', () => {
+    window.localStorage.setItem(saveGameLocalStorageKey, JSON.stringify(gameController));
+});

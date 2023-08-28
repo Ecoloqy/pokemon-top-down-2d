@@ -1,4 +1,4 @@
-import {CharacterFacing} from "../utils/interfaces";
+import { CharacterFacing } from "../utils/types.js";
 
 export interface SingleKeyProps {
     pressed: boolean;

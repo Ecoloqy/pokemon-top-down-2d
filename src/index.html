@@ -16,7 +16,10 @@
                 <button id="unmute-button" class="hidden w-[160px] bg-amber-50 text-black py-2 px-8">Unmute</button>
             </div>
 
-            <canvas id="game-window" class="max-h-[100vh] sm:w-[100vw] sm:h-full"></canvas>
+            <div id="game-window" class="flex relative justify-center items-center sm:h-[100vh] w-[100vw] sm:w-full">
+                <canvas class="max-h-[100vh] w-[100vw] sm:h-full"></canvas>
+                <div id="game-battle-frame" class="hidden absolute h-100 w-100"></div>
+            </div>
 
             <div id="game-controls" class="h-full w-full sm:hidden">
                 <button id="a-button"></button>

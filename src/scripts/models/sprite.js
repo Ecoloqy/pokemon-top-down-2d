@@ -7,7 +7,12 @@ export class Sprite extends Cell {
         this.velocity = velocity;
         this.image.src = src;
     }
-    drawImage(context) {
-        context.drawImage(this.image, this.position.x, this.position.y);
+    drawImage(context, width, height) {
+        if (!!width && !!height) {
+            context.drawImage(this.image, this.position.x, this.position.y, width, height);
+        }
+        else {
+            context.drawImage(this.image, this.position.x, this.position.y);
+        }
     }
 }

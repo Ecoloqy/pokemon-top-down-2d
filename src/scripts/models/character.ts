@@ -1,12 +1,17 @@
 import { Sprite, SpriteProps } from "./sprite.js";
 import { CharacterAnimation } from "../utils/character-animation.js";
-import { CharacterFacing } from "../utils/interfaces.js";
+import { CharacterFacing } from "../utils/types.js";
 import { playerSpriteRenderPosition } from "../../data/variables.js";
+import { Pokemon } from "./pokemon.js";
+import { createPokemon } from "../../data/enemy-initializer.js";
 
 export class Character extends Sprite {
 
+    public readonly pokemons: Pokemon[] = [createPokemon('squirtle')];
+
     public isMoving: boolean = false;
     public isRunning: boolean = false;
+    public isInBattle: boolean = false;
     public moveElapsed: number = 0;
 
     private characterAnimation = new CharacterAnimation();
@@ -32,7 +37,7 @@ export class Character extends Sprite {
         );
     }
 
-    setFacing(facing: { facingX: CharacterFacing, facingY: CharacterFacing }): void {
+    public setFacing(facing: { facingX: CharacterFacing, facingY: CharacterFacing }): void {
         this.facingX = facing.facingX;
         this.facingY = facing.facingY;
     }

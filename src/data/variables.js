@@ -1,3 +1,4 @@
+export const saveGameLocalStorageKey = 'savedGameStatus';
 export const mapWidth = 98;
 export const mapHeight = 82;
 export const canvasWidth = 960;
