@@ -12,7 +12,7 @@ export class KeyEvents {
             });
         });
 
-        window.addEventListener('touchstart', (event: TouchEvent) => {
+        document.querySelector('canvas').addEventListener('touchstart', (event: TouchEvent) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             keys.touch.pressed = true;
@@ -20,7 +20,7 @@ export class KeyEvents {
             keys.touch.startY = event.targetTouches.item(0).clientY;
         }, { passive: false });
 
-        window.addEventListener('touchmove', (event: TouchEvent) => {
+        document.querySelector('canvas').addEventListener('touchmove', (event: TouchEvent) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             if (keys.touch.pressed) {
@@ -47,7 +47,7 @@ export class KeyEvents {
             }
         }, { passive: false });
 
-        window.addEventListener('touchend', (event: TouchEvent) => {
+        document.querySelector('canvas').addEventListener('touchend', (event: TouchEvent) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             keys.touch.pressed = false;

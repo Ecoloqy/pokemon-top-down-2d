@@ -688,12 +688,6 @@ body {
   }
 }
 
-@media(max-height: 320px) {
-  #ui-controls {
-    display: none;
-  }
-}
-
 @media(min-width: 640px) {
   #game-window {
     display: flex;
