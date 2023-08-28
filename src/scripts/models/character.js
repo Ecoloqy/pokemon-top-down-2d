@@ -1,11 +1,11 @@
 import { Sprite } from "./sprite.js";
 import { CharacterAnimation } from "../utils/character-animation.js";
-import { playerSpriteRenderPosition } from "../../data/variables.js";
+import { playerSpriteRenderPosition, playerStartingPokemon } from "../../data/variables.js";
 import { createPokemon } from "../../data/enemy-initializer.js";
 export class Character extends Sprite {
     constructor({ src, position, velocity = 1, frames, collisionPadding }) {
         super({ src, position, velocity, frames, collisionPadding });
-        this.pokemons = [createPokemon('squirtle')];
+        this.pokemons = [createPokemon(playerStartingPokemon)];
         this.isMoving = false;
         this.isRunning = false;
         this.isInBattle = false;

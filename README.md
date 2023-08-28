@@ -47,17 +47,19 @@ As in every Pokemon game, here we also start our adventure as a Pokemon Trainer.
 
 ## Stage 2
 
-### Enhanced User Interface
-- [x] Preparing images and sprites for mobiles
-- [x] Simple mobile design with controls
-- [x] Character interaction with touch controls
-
 ### Battle Sequences
 - [x] Battle activation
 - [x] Transition from map to battle sequence
 - [x] Draw battle background
-- [ ] Add battle sprites
-- [ ] Add battle logic
+- [x] Add battle sprites
+- [x] Health bar interface
+- [x] Player attacks
+- [x] Enemy attacks
+- [x] Battle end
+- [x] Transition back to map
+- [ ] Generic dialogue mechanic
+- [ ] Divide battle sequence into classes
+- [ ] Music and sound effects
 
 ### NPC Interaction
 - [ ] Characters creation

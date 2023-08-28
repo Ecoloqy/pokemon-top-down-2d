@@ -1,4 +1,4 @@
-export const saveGameLocalStorageKey: string = 'savedGameStatus';
+import { PokemonName } from "../scripts/utils/types.js";
 
 export const mapWidth: number = 98;
 export const mapHeight: number = 82;
@@ -20,6 +20,12 @@ export const playerSpriteRenderPosition: { x: number, y: number } = { x: 0, y: 1
 export const spriteAnimationPadding: number = 64;
 export const spriteAnimationFrames: number = 4;
 export const spriteAnimationDirections: { left: number, right: number, top: number, down: number } = { down: 1, left: 0, right: 2, top: 3 };
+
+export const frontPokemonPosition: { x: number, y: number } = { x: 550, y: 0 };
+export const backPokemonPosition: { x: number, y: number } = { x: 100, y: 180 };
+export const pokemonSpriteSize: { width: number, height: number } = { width: 300, height: 300 };
+export const playerStartingPokemon: PokemonName = 'squirtle';
+export const pokemonHealthBarParts: number = 290;
 
 export const availableMoveKeys: string[] = ['w', 'a', 's', 'd'];
 export const keydownTransition: {

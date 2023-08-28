@@ -23,7 +23,7 @@ import { createPokemon } from "./data/enemy-initializer.js";
 import { createBackground, createForeground } from "./data/surroundings-initializer.js";
 import { createPlayer } from "./data/characters-initializer.js";
 import { getInteractive } from "./scripts/utils/get-interactive.js";
-import { WildBattleInitiator } from "./scripts/logic/wild-battle-initiator.js";
+import { BattleInitiator } from "./scripts/logic/battle-initiator.js";
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 class GameController {
@@ -31,8 +31,10 @@ class GameController {
         this.keys = new Keys();
         this.keyEvents = new KeyEvents(this.keys);
         this.interfaceController = new InterfaceController(this.keys);
-        this.boundaries = getInteractive(mapToArray(collisions), Boundary);
-        this.battleZones = getInteractive(mapToArray(battleZones), BattleZone);
+        this.collisionMap = mapToArray(collisions);
+        this.battleZonesMap = mapToArray(battleZones);
+        this.boundaries = getInteractive(this.collisionMap, Boundary);
+        this.battleZones = getInteractive(this.battleZonesMap, BattleZone);
         this.background = createBackground();
         this.foreground = createForeground();
         this.player = createPlayer();
@@ -44,6 +46,7 @@ class GameController {
         canvas.height = height;
         context.fillRect(0, 0, width, height);
         const animate = () => {
+            var _a;
             window.requestAnimationFrame(animate);
             this.background.drawImage(context);
             this.player.drawImage(context);
@@ -54,21 +57,18 @@ class GameController {
             this.battleZones.forEach((battleZone) => {
                 battleZone.drawCell(context);
             });
-            if (this.player.isInBattle) {
-                this.battleInitiator;
-            }
-            if (!this.player.isInBattle) {
+            if (this.player && !this.player.isInBattle) {
                 this.checkBattleZoneOnMove();
                 this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.battleZones);
             }
             if (!!this.battleInitiator) {
                 if (this.battleInitiator.isBattleInitialized) {
-                    this.battleInitiator.battleBackground.drawImage(context, canvasWidth, canvasHeight);
+                    this.battleInitiator.drawBattlefield(context, canvasWidth, canvasHeight);
                 }
-                if (this.battleInitiator.isBattleCompleted) {
-                    this.battleInitiator.player.isInBattle = false;
-                    this.battleInitiator = null;
-                }
+            }
+            if (!!((_a = this.battleInitiator) === null || _a === void 0 ? void 0 : _a.isBattleCompleted)) {
+                this.player.isInBattle = false;
+                this.battleInitiator = null;
             }
         };
         animate();
@@ -90,7 +90,8 @@ class GameController {
                             const randomEnemy = this.enemyRandomizer.getRandomEnemy();
                             if (randomEnemy) {
                                 this.player.isInBattle = true;
-                                this.battleInitiator = new WildBattleInitiator(this.player, randomEnemy);
+                                const newEnemyClone = createPokemon(randomEnemy.symbol);
+                                this.battleInitiator = new BattleInitiator(this.keys, this.player, newEnemyClone);
                             }
                             return;
                         }

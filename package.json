@@ -4,7 +4,8 @@
   "author": "Andrzej Szczepaniak",
   "main": "src/index.html",
   "scripts": {
-    "build-styles": "npx tailwindcss -i src/styles/input.css -o ./src/style.css --watch"
+    "build-styles": "npx tailwindcss -i src/styles/input.css -o ./src/style.css --watch",
+    "force-rebuild": "tsc -p ./tsconfig.json"
   },
   "type": "module",
   "devDependencies": {

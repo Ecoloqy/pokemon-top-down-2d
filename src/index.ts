@@ -13,7 +13,6 @@ import {
     playerMoveSpeedDelay,
     mapScale,
     playerRunSpeedDelay,
-    saveGameLocalStorageKey,
 } from "./data/variables.js";
 import { Boundary } from "./scripts/models/boundary.js";
 import { Cell } from "./scripts/models/cell.js";
@@ -25,34 +24,21 @@ import { EnemyRandomizer } from "./scripts/utils/enemy-randomizer.js";
 import { createPokemon } from "./data/enemy-initializer.js";
 import { createBackground, createForeground } from "./data/surroundings-initializer.js";
 import { createPlayer } from "./data/characters-initializer.js";
-import { Pokemon } from "./scripts/models/pokemon.js";
 import { getInteractive } from "./scripts/utils/get-interactive.js";
-import { WildBattleInitiator } from "./scripts/logic/wild-battle-initiator.js";
 import { BattleInitiator } from "./scripts/logic/battle-initiator.js";
 
 const canvas: HTMLCanvasElement | null = document.querySelector('canvas');
 const context = canvas.getContext('2d');
-
-interface GameControllerStatus {
-    keys: Keys;
-    keyEvents: KeyEvents;
-    interfaceController: InterfaceController;
-    player: Character;
-    playerActivePokemons: Pokemon[];
-    background: Sprite;
-    foreground: Sprite;
-    boundaries: Boundary[];
-    battleZones: BattleZone[];
-    enemyRandomizer: EnemyRandomizer;
-}
 
 class GameController {
     private readonly keys: Keys = new Keys();
     private readonly keyEvents: KeyEvents = new KeyEvents(this.keys);
     private readonly interfaceController: InterfaceController = new InterfaceController(this.keys);
 
-    private readonly boundaries: Boundary[] = getInteractive(mapToArray(collisions), Boundary);
-    private readonly battleZones: BattleZone[] = getInteractive(mapToArray(battleZones), BattleZone);
+    private readonly collisionMap = mapToArray(collisions);
+    private readonly battleZonesMap = mapToArray(battleZones);
+    private readonly boundaries: Boundary[] = getInteractive(this.collisionMap, Boundary);
+    private readonly battleZones: BattleZone[] = getInteractive(this.battleZonesMap, BattleZone);
 
     private readonly background: Sprite = createBackground();
     private readonly foreground: Sprite = createForeground();
@@ -85,23 +71,19 @@ class GameController {
                 battleZone.drawCell(context);
             })
 
-            if (this.player.isInBattle) {
-                this.battleInitiator
-            }
-
-            if (!this.player.isInBattle) {
+            if (this.player && !this.player.isInBattle) {
                 this.checkBattleZoneOnMove();
                 this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.battleZones);
             }
 
             if (!!this.battleInitiator) {
                 if (this.battleInitiator.isBattleInitialized) {
-                    this.battleInitiator.battleBackground.drawImage(context, canvasWidth, canvasHeight);
+                    this.battleInitiator.drawBattlefield(context, canvasWidth, canvasHeight);
                 }
-                if (this.battleInitiator.isBattleCompleted) {
-                    this.battleInitiator.player.isInBattle = false;
-                    this.battleInitiator = null;
-                }
+            }
+            if (!!this.battleInitiator?.isBattleCompleted) {
+                this.player.isInBattle = false;
+                this.battleInitiator = null;
             }
         }
 
@@ -127,7 +109,8 @@ class GameController {
                         const randomEnemy = this.enemyRandomizer.getRandomEnemy();
                         if (randomEnemy) {
                             this.player.isInBattle = true;
-                            this.battleInitiator = new WildBattleInitiator(this.player, randomEnemy);
+                            const newEnemyClone = createPokemon(randomEnemy.symbol);
+                            this.battleInitiator = new BattleInitiator(this.keys, this.player, newEnemyClone);
                         }
                         return;
                     }

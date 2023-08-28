@@ -1,4 +1,3 @@
-export const saveGameLocalStorageKey = 'savedGameStatus';
 export const mapWidth = 98;
 export const mapHeight = 82;
 export const canvasWidth = 960;
@@ -15,6 +14,11 @@ export const playerSpriteRenderPosition = { x: 0, y: 12 };
 export const spriteAnimationPadding = 64;
 export const spriteAnimationFrames = 4;
 export const spriteAnimationDirections = { down: 1, left: 0, right: 2, top: 3 };
+export const frontPokemonPosition = { x: 550, y: 0 };
+export const backPokemonPosition = { x: 100, y: 180 };
+export const pokemonSpriteSize = { width: 300, height: 300 };
+export const playerStartingPokemon = 'squirtle';
+export const pokemonHealthBarParts = 290;
 export const availableMoveKeys = ['w', 'a', 's', 'd'];
 export const keydownTransition = {
     w: { x: 0, y: 3, abs: 3 },

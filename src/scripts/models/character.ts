@@ -1,13 +1,13 @@
 import { Sprite, SpriteProps } from "./sprite.js";
 import { CharacterAnimation } from "../utils/character-animation.js";
 import { CharacterFacing } from "../utils/types.js";
-import { playerSpriteRenderPosition } from "../../data/variables.js";
+import { playerSpriteRenderPosition, playerStartingPokemon } from "../../data/variables.js";
 import { Pokemon } from "./pokemon.js";
 import { createPokemon } from "../../data/enemy-initializer.js";
 
 export class Character extends Sprite {
 
-    public readonly pokemons: Pokemon[] = [createPokemon('squirtle')];
+    public readonly pokemons: Pokemon[] = [createPokemon(playerStartingPokemon)];
 
     public isMoving: boolean = false;
     public isRunning: boolean = false;
