@@ -118,7 +118,7 @@ body {
 
 #enemy-pokemon-name {
     left: 20px;
-    bottom: 65px;
+    top: 20px;
 }
 
 #enemy-pokemon-lvl {
