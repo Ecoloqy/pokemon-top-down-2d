@@ -1,3 +1,5 @@
+export const dialogueField = document.getElementById('dialogue-value');
+
 export const gameBattleFrame = document.getElementById('game-battle-frame');
 
 export const attack1Field = document.getElementById('player-pokemon-attack-1');

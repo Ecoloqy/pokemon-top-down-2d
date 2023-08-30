@@ -87,4 +87,16 @@ export class Keys {
             }
         }
     }
+    getFacingKey(coords) {
+        if (coords.facingX === 1 && coords.facingY === 0) {
+            return 'd';
+        }
+        if (coords.facingX === 0 && coords.facingY === -1) {
+            return 'a';
+        }
+        if (coords.facingX === -1 && coords.facingY === 0) {
+            return 's';
+        }
+        return 'w';
+    }
 }

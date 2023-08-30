@@ -701,7 +701,7 @@ body {
 }
 
 @media(min-width: 640px) {
-  #game-window canvas, #game-battle-frame, #game-battle-details {
+  #game-window canvas, #game-battle-frame, #game-battle-details, #game-dialogue-details {
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -721,7 +721,7 @@ body {
     z-index: -1;
   }
 
-  #game-window canvas, #game-battle-frame, #game-battle-details {
+  #game-window canvas, #game-battle-frame, #game-battle-details, #game-dialogue-details {
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -746,9 +746,15 @@ body {
   -webkit-animation: exitBattleFrameAnimation 2s ease-in;
 }
 
+#dialogue-value {
+  left: 30px;
+  right: 30px;
+  bottom: 15px;
+}
+
 #enemy-pokemon-name {
   left: 20px;
-  top: 20px;
+  bottom: 65px;
 }
 
 #enemy-pokemon-lvl {
@@ -784,10 +790,6 @@ body {
 #player-pokemon-attack-4 {
   left: 320px;
   bottom: 15px;
-}
-
-#player-pokemon-attack-1-ind, #player-pokemon-attack-2-ind, #player-pokemon-attack-3-ind, #player-pokemon-attack-4-ind {
-  background: url("assets/img/battle/cursor.png") no-repeat center;
 }
 
 @keyframes exitBattleFrameAnimation {

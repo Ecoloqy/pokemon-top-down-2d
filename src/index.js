@@ -8,43 +8,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Keys } from "./scripts/logic/keys.js";
-import { collisions } from "./data/map/collisions.js";
-import { battleZones } from "./data/map/battle-zones.js";
-import { mapToArray } from "./scripts/utils/map-to-array.js";
 import { canvasWidth, canvasHeight, singleTileSize, keydownTransition, availableMoveKeys, playerMoveSpeedDelay, mapScale, playerRunSpeedDelay, } from "./data/variables.js";
-import { Boundary } from "./scripts/models/boundary.js";
 import { Cell } from "./scripts/models/cell.js";
 import { delayTimeout } from "./scripts/utils/delay-timeout.js";
 import { KeyEvents } from "./scripts/logic/key-events.js";
 import { InterfaceController } from "./scripts/logic/interface-controller.js";
-import { BattleZone } from "./scripts/models/battle-zone.js";
 import { EnemyRandomizer } from "./scripts/utils/enemy-randomizer.js";
 import { createPokemon } from "./data/enemy-initializer.js";
 import { createBackground, createForeground } from "./data/surroundings-initializer.js";
 import { createPlayer } from "./data/characters-initializer.js";
-import { getInteractive } from "./scripts/utils/get-interactive.js";
-import { BattleInitiator } from "./scripts/logic/battle-initiator.js";
+import { ParseData } from "./data/map/parse-data.js";
+import { BattleController } from "./scripts/logic/battle-controller.js";
+import { DialogueController } from "./scripts/logic/dialogue-controller.js";
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 class GameController {
     constructor(width, height) {
+        this.player = createPlayer();
         this.keys = new Keys();
         this.keyEvents = new KeyEvents(this.keys);
         this.interfaceController = new InterfaceController(this.keys);
-        this.collisionMap = mapToArray(collisions);
-        this.battleZonesMap = mapToArray(battleZones);
-        this.boundaries = getInteractive(this.collisionMap, Boundary);
-        this.battleZones = getInteractive(this.battleZonesMap, BattleZone);
-        this.background = createBackground();
-        this.foreground = createForeground();
-        this.player = createPlayer();
+        this.dialogueController = new DialogueController(this.player, this.keys);
+        this.dataParser = new ParseData();
+        this.boundaries = [];
+        this.interactive = [];
+        this.battleZones = [];
+        this.activeMap = 'world';
+        this.battleController = null;
         this.enemyRandomizer = new EnemyRandomizer([
             { enemy: createPokemon('pidgey'), changeInPercent: 10 },
         ]);
-        this.battleInitiator = null;
         canvas.width = width;
         canvas.height = height;
         context.fillRect(0, 0, width, height);
+        this.loadMapData(this.activeMap);
         const animate = () => {
             var _a;
             window.requestAnimationFrame(animate);
@@ -57,21 +54,54 @@ class GameController {
             this.battleZones.forEach((battleZone) => {
                 battleZone.drawCell(context);
             });
-            if (this.player && !this.player.isInBattle) {
+            if (this.player && !this.player.inInteraction) {
+                this.checkInteractive();
                 this.checkBattleZoneOnMove();
-                this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.battleZones);
+                this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.interactive, ...this.battleZones);
             }
-            if (!!this.battleInitiator) {
-                if (this.battleInitiator.isBattleInitialized) {
-                    this.battleInitiator.drawBattlefield(context, canvasWidth, canvasHeight);
+            if (!!this.battleController) {
+                if (this.battleController.battleTransitionController.isBattleInitialized) {
+                    this.battleController.drawBattlefield(context, canvasWidth, canvasHeight);
                 }
             }
-            if (!!((_a = this.battleInitiator) === null || _a === void 0 ? void 0 : _a.isBattleCompleted)) {
-                this.player.isInBattle = false;
-                this.battleInitiator = null;
+            if (!!((_a = this.battleController) === null || _a === void 0 ? void 0 : _a.isBattleCompleted)) {
+                this.player.inInteraction = false;
+                this.battleController = null;
             }
+            this.dialogueController.drawText(context);
         };
         animate();
+    }
+    loadMapData(mapName) {
+        this.background = createBackground(this.activeMap);
+        this.foreground = createForeground(this.activeMap);
+        this.dataParser.fetchData(mapName).then(() => {
+            this.boundaries = this.dataParser.getCollisions();
+            this.interactive = this.dataParser.getInteractive();
+            this.battleZones = this.dataParser.getBattleZones();
+        });
+    }
+    checkInteractive() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.player.isMoving) {
+                return;
+            }
+            const key = this.keys.getFacingKey(this.player.getFacing());
+            if (key && this.keys.lastKeyPressed === key) {
+                for (let i = 0; i < this.interactive.length; i++) {
+                    if (this.player.checkCollidingWith(new Cell({
+                        position: {
+                            x: this.interactive[i].getPosition().x + keydownTransition[key].x * singleTileSize,
+                            y: this.interactive[i].getPosition().y + keydownTransition[key].y * singleTileSize,
+                        }
+                    }))) {
+                        this.player.isInteractionAvailable = true;
+                        return;
+                    }
+                }
+                this.player.isInteractionAvailable = false;
+            }
+        });
     }
     checkBattleZoneOnMove() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -89,9 +119,9 @@ class GameController {
                         }))) {
                             const randomEnemy = this.enemyRandomizer.getRandomEnemy();
                             if (randomEnemy) {
-                                this.player.isInBattle = true;
+                                this.player.inInteraction = true;
                                 const newEnemyClone = createPokemon(randomEnemy.symbol);
-                                this.battleInitiator = new BattleInitiator(this.keys, this.player, newEnemyClone);
+                                this.battleController = new BattleController(this.keys, this.player, newEnemyClone);
                             }
                             return;
                         }
@@ -106,21 +136,22 @@ class GameController {
             if (this.player.isMoving) {
                 return;
             }
+            const collisionElements = [...this.interactive, ...this.boundaries];
             for (let key of availableMoveKeys) {
                 if (this.keys[key].pressed && this.keys.lastKeyPressed === key) {
-                    for (let i = 0; i < this.boundaries.length; i++) {
+                    const keyPlayerFacing = this.keys.getKeyFacing(key);
+                    this.player.setFacing(keyPlayerFacing);
+                    for (let i = 0; i < collisionElements.length; i++) {
                         if (this.player.checkCollidingWith(new Cell({
                             position: {
-                                x: this.boundaries[i].getPosition().x + keydownTransition[key].x * singleTileSize,
-                                y: this.boundaries[i].getPosition().y + keydownTransition[key].y * singleTileSize,
+                                x: collisionElements[i].getPosition().x + keydownTransition[key].x * singleTileSize,
+                                y: collisionElements[i].getPosition().y + keydownTransition[key].y * singleTileSize,
                             }
                         }))) {
                             return;
                         }
                     }
                     this.player.isMoving = true;
-                    const keyPlayerFacing = this.keys.getKeyFacing(key);
-                    this.player.setFacing(keyPlayerFacing);
                     for (let i = 0; i < singleTileSize * mapScale;) {
                         const moveDelay = this.player.isRunning ? playerRunSpeedDelay : playerMoveSpeedDelay;
                         cells.forEach((cell) => {

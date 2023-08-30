@@ -8,7 +8,8 @@ export class Character extends Sprite {
         this.pokemons = [createPokemon(playerStartingPokemon)];
         this.isMoving = false;
         this.isRunning = false;
-        this.isInBattle = false;
+        this.inInteraction = false;
+        this.isInteractionAvailable = false;
         this.moveElapsed = 0;
         this.characterAnimation = new CharacterAnimation();
         this.facingX = 0;
@@ -17,6 +18,9 @@ export class Character extends Sprite {
     drawImage(context) {
         const { spriteDrawX, spriteDrawY } = this.characterAnimation.getSpriteCoordinates(this.facingX, this.facingY, this.isMoving, this.isRunning);
         context.drawImage(this.image, spriteDrawX, spriteDrawY, this.image.width / this.frames.x, this.image.height / this.frames.y, this.position.x - playerSpriteRenderPosition.x, this.position.y - playerSpriteRenderPosition.y, this.image.width / this.frames.x, this.image.height / this.frames.y);
+    }
+    getFacing() {
+        return { facingX: this.facingX, facingY: this.facingY };
     }
     setFacing(facing) {
         this.facingX = facing.facingX;

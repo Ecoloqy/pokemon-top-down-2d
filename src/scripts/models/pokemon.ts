@@ -1,7 +1,7 @@
 import { Sprite } from "./sprite.js";
 import { backPokemonPosition, frontPokemonPosition, pokemonHealthBarParts } from "../../data/variables.js";
 import { PokemonAttack } from "./pokemon-attack.js";
-import {PokemonName} from "../utils/types";
+import { PokemonName } from "../utils/types.js";
 
 export class Pokemon {
 

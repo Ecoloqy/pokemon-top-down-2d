@@ -11,7 +11,9 @@ export class Character extends Sprite {
 
     public isMoving: boolean = false;
     public isRunning: boolean = false;
-    public isInBattle: boolean = false;
+    public inInteraction: boolean = false;
+    public isInteractionAvailable: boolean = false;
+
     public moveElapsed: number = 0;
 
     private characterAnimation = new CharacterAnimation();
@@ -35,6 +37,10 @@ export class Character extends Sprite {
             this.image.width / this.frames.x,
             this.image.height / this.frames.y,
         );
+    }
+
+    public getFacing(): { facingX: CharacterFacing, facingY: CharacterFacing } {
+        return { facingX: this.facingX, facingY: this.facingY };
     }
 
     public setFacing(facing: { facingX: CharacterFacing, facingY: CharacterFacing }): void {
