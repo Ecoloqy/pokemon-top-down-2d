@@ -13,6 +13,48 @@ export class InterfaceController {
             keys.setKeyPressed(buttonKey, false);
         }));
 
+        ['arrow-up', 'arrow-left', 'arrow-down', 'arrow-right'].forEach((buttonName) => document.getElementById(buttonName).addEventListener('touchstart', (event: TouchEvent) => {
+            switch (buttonName) {
+                case 'arrow-up': {
+                    keys.setKeyPressed('w', true);
+                    break;
+                }
+                case 'arrow-left': {
+                    keys.setKeyPressed('a', true);
+                    break;
+                }
+                case 'arrow-down': {
+                    keys.setKeyPressed('s', true);
+                    break;
+                }
+                case 'arrow-right': {
+                    keys.setKeyPressed('d', true);
+                    break;
+                }
+            }
+        }));
+
+        ['arrow-up', 'arrow-left', 'arrow-down', 'arrow-right'].forEach((buttonName) => document.getElementById(buttonName).addEventListener('touchend', (event: TouchEvent) => {
+            switch (buttonName) {
+                case 'arrow-up': {
+                    keys.setKeyPressed('w', false);
+                    break;
+                }
+                case 'arrow-left': {
+                    keys.setKeyPressed('a', false);
+                    break;
+                }
+                case 'arrow-down': {
+                    keys.setKeyPressed('s', false);
+                    break;
+                }
+                case 'arrow-right': {
+                    keys.setKeyPressed('d', false);
+                    break;
+                }
+            }
+        }));
+
         document.getElementById('reset-button').addEventListener('click', (event: MouseEvent) => {
             location.reload();
         });
