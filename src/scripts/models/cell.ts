@@ -8,6 +8,7 @@ export interface CellProps {
 
 export class Cell {
 
+    protected originalPosition!: { x: number, y: number };
     protected width: number = tileScale().width;
     protected height: number = tileScale().height;
     protected position!: { x: number, y: number };
@@ -15,6 +16,7 @@ export class Cell {
     protected collisionPadding!: { n: number, s: number, e: number, w: number };
 
     constructor({ position = { x: 0, y: 0 }, frames = { x: 1, y: 1 }, collisionPadding = { n: 0, s: 0, e: 0, w: 0 } }: CellProps) {
+        this.originalPosition = position;
         this.position = position;
         this.frames = frames;
         this.collisionPadding = collisionPadding;

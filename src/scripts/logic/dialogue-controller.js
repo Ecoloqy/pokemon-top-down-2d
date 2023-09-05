@@ -51,7 +51,7 @@ export class DialogueController {
     typewriterEffect(textToType) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!textToType) {
-                dialogueField.textContent = '';
+                dialogueField.innerHTML = '';
                 this.dialogueCompleted = true;
                 this.typeWriterSpeed = 50;
                 return;
@@ -62,7 +62,7 @@ export class DialogueController {
                 t++;
                 charIndex = Math.floor(t);
                 yield delayTimeout(this.typeWriterSpeed);
-                dialogueField.textContent = textToType.slice(0, charIndex);
+                dialogueField.innerHTML = textToType.slice(0, charIndex);
                 if (charIndex >= textToType.length) {
                     this.dialogueCompleted = true;
                     this.typeWriterSpeed = 50;

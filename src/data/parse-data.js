@@ -1,12 +1,23 @@
-import { getInteractive } from "../../scripts/utils/get-interactive.js";
-import { Boundary } from "../../scripts/models/boundary.js";
-import { BattleZone } from "../../scripts/models/battle-zone.js";
-import { mapToArray } from "../../scripts/utils/map-to-array.js";
+import { getInteractive, getInteractiveBoundary } from "../scripts/utils/get-interactive.js";
+import { Boundary } from "../scripts/models/boundary.js";
+import { BattleZone } from "../scripts/models/battle-zone.js";
+import { mapToArray } from "../scripts/utils/map-to-array.js";
 export class ParseData {
     constructor() {
         this.collisions = [];
         this.interactive = [];
         this.battleZones = [];
+        this.characters = [];
+        this.dialogues = [];
+    }
+    fetchCharacters(mapName) {
+        return fetch(`./data/dialogues/${mapName}.json`)
+            .then((res) => res.json())
+            .then((data) => {
+            this.characters = [];
+            this.dialogues = data.dialogues;
+            return data;
+        });
     }
     fetchData(mapName) {
         return fetch(`./data/map/${mapName}.json`)
@@ -21,10 +32,13 @@ export class ParseData {
     getCollisions() {
         return getInteractive(this.collisions, Boundary);
     }
-    getInteractive() {
-        return getInteractive(this.interactive, Boundary);
+    getInteractive(dialogueController) {
+        return getInteractiveBoundary(this.interactive, { dialogueController, dialogues: this.dialogues });
     }
     getBattleZones() {
         return getInteractive(this.battleZones, BattleZone);
+    }
+    getDialogues() {
+        return this.dialogues;
     }
 }

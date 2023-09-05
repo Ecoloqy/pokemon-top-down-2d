@@ -16,8 +16,8 @@ import { InterfaceController } from "./scripts/logic/interface-controller.js";
 import { EnemyRandomizer } from "./scripts/utils/enemy-randomizer.js";
 import { createPokemon } from "./data/enemy-initializer.js";
 import { createBackground, createForeground } from "./data/surroundings-initializer.js";
-import { createPlayer } from "./data/characters-initializer.js";
-import { ParseData } from "./data/map/parse-data.js";
+import { createBirdKeeperMale, createPlayer } from "./data/characters-initializer.js";
+import { ParseData } from "./data/parse-data.js";
 import { BattleController } from "./scripts/logic/battle-controller.js";
 import { DialogueController } from "./scripts/logic/dialogue-controller.js";
 const canvas = document.querySelector('canvas');
@@ -33,10 +33,27 @@ class GameController {
         this.boundaries = [];
         this.interactive = [];
         this.battleZones = [];
+        this.characters = [
+            createBirdKeeperMale(this.dialogueController, {
+                position: { x: 1008, y: 266 }, interact: (same) => {
+                    // TODO: set facing when starting conversation
+                    // same.setFacing(this.player.getOppositeFacing());
+                    var _a, _b;
+                    const dialogues = (_b = (_a = this.charactersDialogues.find((dialogue) => dialogue.character === 'birdKeeperMale')) === null || _a === void 0 ? void 0 : _a.content) !== null && _b !== void 0 ? _b : [];
+                    this.dialogueController.setDialogueText(dialogues[0]).then(() => __awaiter(this, void 0, void 0, function* () {
+                        this.player.inInteraction = true;
+                        yield delayTimeout(1000);
+                        this.dialogueController.setDialogueText();
+                        const enemyClone = createPokemon('bulbasaur', 7, 40);
+                        this.battleController = new BattleController(this.keys, this.player, enemyClone);
+                    }));
+                }
+            })
+        ];
         this.activeMap = 'world';
         this.battleController = null;
         this.enemyRandomizer = new EnemyRandomizer([
-            { enemy: createPokemon('pidgey'), changeInPercent: 10 },
+            { enemy: createPokemon('pidgey', 5, 20), changeInPercent: 10 },
         ]);
         canvas.width = width;
         canvas.height = height;
@@ -48,16 +65,26 @@ class GameController {
             this.background.drawImage(context);
             this.player.drawImage(context);
             this.foreground.drawImage(context);
+            this.characters.forEach((character) => {
+                character.drawImage(context);
+            });
             this.boundaries.forEach((boundary) => {
                 boundary.drawCell(context);
+            });
+            this.interactive.forEach((inter) => {
+                inter.drawCell(context);
             });
             this.battleZones.forEach((battleZone) => {
                 battleZone.drawCell(context);
             });
+            if (this.player.isInteractionAvailable && this.player.nextInteractiveElement) {
+                this.player.nextInteractiveElement.interact(this.player.nextInteractiveElement);
+                this.player.nextInteractiveElement = null;
+            }
             if (this.player && !this.player.inInteraction) {
                 this.checkInteractive();
                 this.checkBattleZoneOnMove();
-                this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.interactive, ...this.battleZones);
+                this.transformSpritePositionOnMove(this.background, this.foreground, ...this.boundaries, ...this.interactive, ...this.battleZones, ...this.characters);
             }
             if (!!this.battleController) {
                 if (this.battleController.battleTransitionController.isBattleInitialized) {
@@ -75,10 +102,14 @@ class GameController {
     loadMapData(mapName) {
         this.background = createBackground(this.activeMap);
         this.foreground = createForeground(this.activeMap);
+        this.charactersDialogues = [];
         this.dataParser.fetchData(mapName).then(() => {
             this.boundaries = this.dataParser.getCollisions();
-            this.interactive = this.dataParser.getInteractive();
+            this.interactive = this.dataParser.getInteractive(this.dialogueController);
             this.battleZones = this.dataParser.getBattleZones();
+        });
+        this.dataParser.fetchCharacters(mapName).then(() => {
+            this.charactersDialogues = this.dataParser.getDialogues();
         });
     }
     checkInteractive() {
@@ -88,14 +119,19 @@ class GameController {
             }
             const key = this.keys.getFacingKey(this.player.getFacing());
             if (key && this.keys.lastKeyPressed === key) {
-                for (let i = 0; i < this.interactive.length; i++) {
+                const interactiveElements = [...this.interactive, ...this.characters];
+                for (let i = 0; i < interactiveElements.length; i++) {
                     if (this.player.checkCollidingWith(new Cell({
                         position: {
-                            x: this.interactive[i].getPosition().x + keydownTransition[key].x * singleTileSize,
-                            y: this.interactive[i].getPosition().y + keydownTransition[key].y * singleTileSize,
+                            x: interactiveElements[i].getPosition().x + keydownTransition[key].x * singleTileSize,
+                            y: interactiveElements[i].getPosition().y + keydownTransition[key].y * singleTileSize,
                         }
                     }))) {
                         this.player.isInteractionAvailable = true;
+                        if (this.keys.delete.pressed) {
+                            this.keys.delete.pressed = false;
+                            this.player.nextInteractiveElement = interactiveElements[i];
+                        }
                         return;
                     }
                 }
@@ -136,7 +172,7 @@ class GameController {
             if (this.player.isMoving) {
                 return;
             }
-            const collisionElements = [...this.interactive, ...this.boundaries];
+            const collisionElements = [...this.interactive, ...this.boundaries, ...this.characters];
             for (let key of availableMoveKeys) {
                 if (this.keys[key].pressed && this.keys.lastKeyPressed === key) {
                     const keyPlayerFacing = this.keys.getKeyFacing(key);

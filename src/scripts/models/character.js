@@ -10,6 +10,7 @@ export class Character extends Sprite {
         this.isRunning = false;
         this.inInteraction = false;
         this.isInteractionAvailable = false;
+        this.nextInteractiveElement = null;
         this.moveElapsed = 0;
         this.characterAnimation = new CharacterAnimation();
         this.facingX = 0;
@@ -25,5 +26,10 @@ export class Character extends Sprite {
     setFacing(facing) {
         this.facingX = facing.facingX;
         this.facingY = facing.facingY;
+    }
+    getOppositeFacing() {
+        const facingX = this.facingX === 0 ? 0 : this.facingX === -1 ? 1 : -1;
+        const facingY = this.facingY === 0 ? 0 : this.facingY === -1 ? 1 : -1;
+        return { facingX, facingY };
     }
 }

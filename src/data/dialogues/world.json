@@ -1,0 +1,17 @@
+{
+  "dialogues": [
+    {
+      "character": "birdKeeperMale",
+      "content": [
+        "Get in the fight. I will not give up, I will put my best Pokemon!"
+      ]
+    },
+    {
+      "x": 576,
+      "y": 512,
+      "content": [
+        "Pallet Town: <br/>Shades of Your Journey Await!"
+      ]
+    }
+  ]
+}

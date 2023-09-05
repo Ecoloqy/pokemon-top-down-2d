@@ -562,10 +562,6 @@ video {
   height: 100%;
 }
 
-.max-h-\[100vh\] {
-  max-height: 100vh;
-}
-
 .w-\[10\%\] {
   width: 10%;
 }
@@ -694,6 +690,67 @@ body {
   }
 }
 
+#game-window canvas, #game-battle-frame, #game-battle-details, #game-dialogue-details {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  width: 100vw;
+}
+
+@media (max-width: 640px) {
+  #dialogue-value, #enemy-pokemon-name, #player-pokemon-name, #enemy-pokemon-lvl, #player-pokemon-lvl, #player-pokemon-attack-1, #player-pokemon-attack-2, #player-pokemon-attack-3, #player-pokemon-attack-4 {
+    font-size: 2.2vw;
+  }
+}
+
+#dialogue-value {
+  left: 30px;
+  right: 30px;
+  bottom: 15px;
+}
+
+#enemy-pokemon-name {
+  left: 3%;
+  top: 4%;
+}
+
+#enemy-pokemon-lvl {
+  left: 39%;
+  top: 4%;
+}
+
+#player-pokemon-name {
+  left: 57%;
+  bottom: 39%;
+}
+
+#player-pokemon-lvl {
+  left: 92%;
+  bottom: 39%;
+}
+
+#player-pokemon-attack-1 {
+  left: 8%;
+  bottom: 14%;
+}
+
+#player-pokemon-attack-2 {
+  left: 50%;
+  bottom: 14%;
+}
+
+#player-pokemon-attack-3 {
+  left: 8%;
+  bottom: 5%;
+}
+
+#player-pokemon-attack-4 {
+  left: 50%;
+  bottom: 5%;
+}
+
 @media(orientation: landscape) and (max-width: 640px) {
   #game-keys {
     display: none;
@@ -701,6 +758,10 @@ body {
 }
 
 @media(min-width: 640px) {
+  html, body {
+    font-size: 6px;
+  }
+
   #game-window canvas, #game-battle-frame, #game-battle-details, #game-dialogue-details {
     display: flex;
     flex-direction: column;
@@ -713,6 +774,10 @@ body {
 }
 
 @media(min-width: 1000px) {
+  html, body {
+    font-size: 16px;
+  }
+
   #game-window-frame {
     background: url("assets/img/interface/gb-frame.png") no-repeat center;
     position: absolute;
@@ -730,6 +795,52 @@ body {
     height: 420px;
     width: 660px;
   }
+
+  #dialogue-value {
+    left: 30px;
+    right: 30px;
+    bottom: 15px;
+  }
+
+  #enemy-pokemon-name {
+    left: 20px;
+    top: 20px;
+  }
+
+  #enemy-pokemon-lvl {
+    left: 250px;
+    top: 20px;
+  }
+
+  #player-pokemon-name {
+    left: 380px;
+    bottom: 165px;
+  }
+
+  #player-pokemon-lvl {
+    left: 610px;
+    bottom: 165px;
+  }
+
+  #player-pokemon-attack-1 {
+    left: 50px;
+    bottom: 65px;
+  }
+
+  #player-pokemon-attack-2 {
+    left: 320px;
+    bottom: 65px;
+  }
+
+  #player-pokemon-attack-3 {
+    left: 50px;
+    bottom: 15px;
+  }
+
+  #player-pokemon-attack-4 {
+    left: 320px;
+    bottom: 15px;
+  }
 }
 
 #game-battle-frame #enter-battle-animation {
@@ -744,52 +855,6 @@ body {
   position: absolute;
   animation: exitBattleFrameAnimation 2s ease-in;
   -webkit-animation: exitBattleFrameAnimation 2s ease-in;
-}
-
-#dialogue-value {
-  left: 30px;
-  right: 30px;
-  bottom: 15px;
-}
-
-#enemy-pokemon-name {
-  left: 20px;
-  top: 20px;
-}
-
-#enemy-pokemon-lvl {
-  left: 250px;
-  top: 20px;
-}
-
-#player-pokemon-name {
-  left: 380px;
-  bottom: 165px;
-}
-
-#player-pokemon-lvl {
-  left: 610px;
-  bottom: 165px;
-}
-
-#player-pokemon-attack-1 {
-  left: 50px;
-  bottom: 65px;
-}
-
-#player-pokemon-attack-2 {
-  left: 320px;
-  bottom: 65px;
-}
-
-#player-pokemon-attack-3 {
-  left: 50px;
-  bottom: 15px;
-}
-
-#player-pokemon-attack-4 {
-  left: 320px;
-  bottom: 15px;
 }
 
 @keyframes exitBattleFrameAnimation {

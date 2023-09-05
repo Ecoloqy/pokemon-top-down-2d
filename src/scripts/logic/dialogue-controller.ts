@@ -13,6 +13,7 @@ export class DialogueController {
 
     private readonly player!: Character;
     private readonly keys!: Keys;
+
     private dialogueText: string = '';
     private dialogueCompleted: boolean = false;
     private typeWriterSpeed: number = 50;
@@ -50,7 +51,7 @@ export class DialogueController {
 
     private async typewriterEffect(textToType?: string): Promise<void> {
         if (!textToType) {
-            dialogueField.textContent = '';
+            dialogueField.innerHTML = '';
             this.dialogueCompleted = true;
             this.typeWriterSpeed = 50;
             return;
@@ -64,7 +65,7 @@ export class DialogueController {
             charIndex = Math.floor(t);
             await delayTimeout(this.typeWriterSpeed);
 
-            dialogueField.textContent = textToType.slice(0, charIndex);
+            dialogueField.innerHTML = textToType.slice(0, charIndex);
 
             if (charIndex >= textToType.length) {
                 this.dialogueCompleted = true;

@@ -6,5 +6,4 @@ export type MapName = 'world' | 'poke_center' | 'poke_mart' | 'gardener' | 'hous
 export type PokemonName = 'bulbasaur' | 'charmander' | 'squirtle' | 'pidgey';
 export type AttackName = 'ember' | 'bubbles' | 'quick_attack' | 'tail_whip';
 export type AttackType = 'Fire' | 'Water' | 'Normal' | 'Dark' | 'Ground' | 'Rock' | 'Fighting' | 'Psychic';
-export type InteractiveModel = typeof Boundary | typeof BattleZone;
-export type Interactive = Boundary | BattleZone;
+export type TerrainBlockModel = typeof Boundary | typeof BattleZone;

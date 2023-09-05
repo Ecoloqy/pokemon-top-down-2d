@@ -2,14 +2,14 @@ import { Pokemon } from "../scripts/models/pokemon.js";
 import { PokemonName } from "../scripts/utils/types.js";
 import { createAttack } from "./attacks-initializer.js";
 
-export const createPokemon = (symbol: PokemonName): Pokemon => {
+export const createPokemon = (symbol: PokemonName, lvl: number = 6, hp: number = 30): Pokemon => {
     switch (symbol) {
         case 'bulbasaur': {
             return new Pokemon(
                 symbol,
                 'Bulbasaur',
-                30,
-                6,
+                hp,
+                lvl,
                 './assets/img/pokemons/bulbasaur-front.png',
                 './assets/img/pokemons/bulbasaur-back.png',
                 [createAttack('ember'), createAttack('quick_attack')]
@@ -19,8 +19,8 @@ export const createPokemon = (symbol: PokemonName): Pokemon => {
             return new Pokemon(
                 symbol,
                 'Charmander',
-                25,
-                6,
+                hp,
+                lvl,
                 './assets/img/pokemons/charmander-front.png',
                 './assets/img/pokemons/charmander-back.png',
                 [createAttack('ember'), createAttack('quick_attack')]
@@ -30,8 +30,8 @@ export const createPokemon = (symbol: PokemonName): Pokemon => {
             return new Pokemon(
                 symbol,
                 'Squirtle',
-                30,
-                6,
+                hp,
+                lvl,
                 './assets/img/pokemons/squirtle-front.png',
                 './assets/img/pokemons/squirtle-back.png',
                 [createAttack('ember'), createAttack('quick_attack')]
@@ -41,8 +41,8 @@ export const createPokemon = (symbol: PokemonName): Pokemon => {
             return new Pokemon(
                 symbol,
                 'Pidgey',
-                20,
-                6,
+                hp,
+                lvl,
                 './assets/img/pokemons/pidgey-front.png',
                 './assets/img/pokemons/pidgey-back.png',
                 [createAttack('ember'), createAttack('quick_attack')]

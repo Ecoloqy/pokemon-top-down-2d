@@ -4,6 +4,7 @@ import { CharacterFacing } from "../utils/types.js";
 import { playerSpriteRenderPosition, playerStartingPokemon } from "../../data/variables.js";
 import { Pokemon } from "./pokemon.js";
 import { createPokemon } from "../../data/enemy-initializer.js";
+import { InteractiveElement } from "../utils/interfaces.js";
 
 export class Character extends Sprite {
 
@@ -13,6 +14,7 @@ export class Character extends Sprite {
     public isRunning: boolean = false;
     public inInteraction: boolean = false;
     public isInteractionAvailable: boolean = false;
+    public nextInteractiveElement: InteractiveElement | null = null;
 
     public moveElapsed: number = 0;
 
@@ -46,6 +48,12 @@ export class Character extends Sprite {
     public setFacing(facing: { facingX: CharacterFacing, facingY: CharacterFacing }): void {
         this.facingX = facing.facingX;
         this.facingY = facing.facingY;
+    }
+
+    public getOppositeFacing(): { facingX: CharacterFacing, facingY: CharacterFacing } {
+        const facingX = this.facingX === 0 ? 0 : this.facingX === -1 ? 1 : -1;
+        const facingY = this.facingY === 0 ? 0 : this.facingY === -1 ? 1 : -1;
+        return { facingX, facingY };
     }
 
 }

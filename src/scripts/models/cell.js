@@ -3,6 +3,7 @@ export class Cell {
     constructor({ position = { x: 0, y: 0 }, frames = { x: 1, y: 1 }, collisionPadding = { n: 0, s: 0, e: 0, w: 0 } }) {
         this.width = tileScale().width;
         this.height = tileScale().height;
+        this.originalPosition = position;
         this.position = position;
         this.frames = frames;
         this.collisionPadding = collisionPadding;
