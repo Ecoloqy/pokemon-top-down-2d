@@ -41,9 +41,8 @@ class GameController {
                     var _a, _b;
                     const dialogues = (_b = (_a = this.charactersDialogues.find((dialogue) => dialogue.character === 'birdKeeperMale')) === null || _a === void 0 ? void 0 : _a.content) !== null && _b !== void 0 ? _b : [];
                     this.dialogueController.setDialogueText(dialogues[0]).then(() => __awaiter(this, void 0, void 0, function* () {
-                        this.player.inInteraction = true;
-                        yield delayTimeout(1000);
                         this.dialogueController.setDialogueText();
+                        this.player.inInteraction = true;
                         const enemyClone = createPokemon('bulbasaur', 7, 40);
                         this.battleController = new BattleController(this.keys, this.player, enemyClone);
                     }));
@@ -128,7 +127,7 @@ class GameController {
                         }
                     }))) {
                         this.player.isInteractionAvailable = true;
-                        if (this.keys.delete.pressed) {
+                        if (this.keys.delete.pressed && !this.player.inInteraction) {
                             this.keys.delete.pressed = false;
                             this.player.nextInteractiveElement = interactiveElements[i];
                         }

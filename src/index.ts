@@ -55,9 +55,8 @@ class GameController {
 
                     const dialogues = this.charactersDialogues.find((dialogue) => dialogue.character === 'birdKeeperMale')?.content ?? [];
                     this.dialogueController.setDialogueText(dialogues[0]).then(async () => {
-                        this.player.inInteraction = true;
-                        await delayTimeout(1000);
                         this.dialogueController.setDialogueText();
+                        this.player.inInteraction = true;
                         const enemyClone = createPokemon('bulbasaur', 7, 40);
                         this.battleController = new BattleController(this.keys, this.player, enemyClone);
                     });
@@ -168,7 +167,7 @@ class GameController {
                     })
                 )) {
                     this.player.isInteractionAvailable = true;
-                    if (this.keys.delete.pressed) {
+                    if (this.keys.delete.pressed && !this.player.inInteraction) {
                         this.keys.delete.pressed = false;
                         this.player.nextInteractiveElement = interactiveElements[i];
                     }
