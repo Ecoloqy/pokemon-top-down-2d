@@ -7,14 +7,14 @@ export class KeyEvents {
                 keys.setKeyPressed(event.key.toLowerCase(), index === 0);
             });
         });
-        document.querySelector('canvas').addEventListener('touchstart', (event) => {
+        document.querySelector('#game-window').addEventListener('touchstart', (event) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             keys.touch.pressed = true;
             keys.touch.startX = event.targetTouches.item(0).clientX;
             keys.touch.startY = event.targetTouches.item(0).clientY;
         }, { passive: false });
-        document.querySelector('canvas').addEventListener('touchmove', (event) => {
+        document.querySelector('#game-window').addEventListener('touchmove', (event) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             if (keys.touch.pressed) {
@@ -38,7 +38,7 @@ export class KeyEvents {
                 }
             }
         }, { passive: false });
-        document.querySelector('canvas').addEventListener('touchend', (event) => {
+        document.querySelector('#game-window').addEventListener('touchend', (event) => {
             event.preventDefault();
             event.stopImmediatePropagation();
             keys.touch.pressed = false;
